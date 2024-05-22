@@ -1,9 +1,8 @@
-import { todoDispatcherContext } from "../context/todoContext";
-import { useContext } from "react";
+import { useTodoDispatcher } from "../context/todoContext";
 import Button from "./Button";
 
 function TodoItem({ todo }) {
-  const dispatch = useContext(todoDispatcherContext);
+  const dispatch = useTodoDispatcher();
 
   return (
     <li
