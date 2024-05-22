@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import Button from "./Button";
+import { todoDispatcherContext } from "../context/todoContext";
 
-function EditTodo({ todo, editTodo, cancelEditTodo }) {
+function EditTodo({ todo }) {
   const [value, setValue] = useState(todo.content);
+  const dispatch = useContext(todoDispatcherContext);
 
   function handleChange(e) {
     const inputValue = e.target.value;
@@ -11,14 +14,22 @@ function EditTodo({ todo, editTodo, cancelEditTodo }) {
 
   function handleClick() {
     if (value.length) {
-      editTodo(value);
+      dispatch({
+        type: "EDIT_TODO",
+        id: todo.id,
+        content: value,
+      });
       setValue("");
     }
   }
 
   function handleKeyDown(e) {
-    if (e.code === "Enter") {
-      editTodo(value);
+    if (e.code === "Enter" && value.length) {
+      dispatch({
+        type: "EDIT_TODO",
+        id: todo.id,
+        content: value,
+      });
       setValue("");
     }
   }
@@ -33,12 +44,17 @@ function EditTodo({ todo, editTodo, cancelEditTodo }) {
         className="mr-15 flex-fill"
         value={value}
       />
-      <button className="btn btn-primary mr-15" onClick={handleClick}>
-        Sauvegarder
-      </button>
-      <button className="btn btn-reverse-primary" onClick={cancelEditTodo}>
-        Annuler
-      </button>
+      <Button
+        onClick={() =>
+          dispatch({
+            type: "TOGGLE_EDIT_TODO",
+            id: todo.id,
+          })
+        }
+        text="Annugler"
+        className="mr-15"
+      />
+      <Button onClick={handleClick} text="Sauvegarder" />
     </div>
   );
 }

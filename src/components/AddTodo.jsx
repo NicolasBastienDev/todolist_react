@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import Button from "./Button";
+import { todoDispatcherContext } from "../context/todoContext";
 
-function AddTodo({ addTodo }) {
+function AddTodo() {
   const [value, setValue] = useState("");
+  const dispatch = useContext(todoDispatcherContext);
 
   function handleChange(e) {
     const inputValue = e.target.value;
@@ -11,14 +14,20 @@ function AddTodo({ addTodo }) {
 
   function handleClick() {
     if (value.length) {
-      addTodo(value);
+      dispatch({
+        type: "ADD_TODO",
+        content: value,
+      });
       setValue("");
     }
   }
 
   function handleKeyDown(e) {
-    if (e.code === "Enter") {
-      addTodo(value);
+    if (e.code === "Enter" && value.length) {
+      dispatch({
+        type: "ADD_TODO",
+        content: value,
+      });
       setValue("");
     }
   }
@@ -33,9 +42,7 @@ function AddTodo({ addTodo }) {
         className="mr-15 flex-fill"
         value={value}
       />
-      <button className="btn btn-primary" onClick={handleClick}>
-        Ajouter
-      </button>
+      <Button text="Ajouter" onClick={handleClick} />
     </div>
   );
 }
